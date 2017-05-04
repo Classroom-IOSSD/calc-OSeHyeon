@@ -8,6 +8,8 @@ int main(){
 	float result = 0.0f;
 	int line = 0;
 
+    int (*functionPointer) (int, int);
+
 	fp = fopen("read.txt","r");
 	if(fp!=NULL){
 		fscanf(fp, "%d", &line);
@@ -16,19 +18,20 @@ int main(){
 			fscanf(fp, "%d %c %d",&operand1, &operator, &operand2);
 			switch(operator) {
 				case '+':
-				result = add(operand1, operand2);
+				functionPointer = add;
 				break;
 				case '-':
-				result = minus(operand1, operand2);
+				functionPointer = minus;
 				break;
 				case '*':
-				result = mul(operand1, operand2);
+				functionPointer = mul;
 				break;
 				case '/':
-				result = div(operand1, operand2);
+				functionPointer = div;
 				break;
 			}		
-			printf("%d %c %d = %.6f\n",
+	        result = functionPointer(operand1, operand2);	
+            printf("%d %c %d = %.6f\n",
 				 operand1, operator, operand2, result);
 		}
 	}
