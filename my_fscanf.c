@@ -1,6 +1,8 @@
 #include "my_fscanf.h"
 #include <stdarg.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 
 void my_fscanf(FILE* fp, const char* format, ...) {
         va_list list;
@@ -12,15 +14,44 @@ void my_fscanf(FILE* fp, const char* format, ...) {
 
                         switch(*format) {
                         case 'd': {
-                            int c = getc(list);
-                            printf("%d", c);
+                            int* intPointer = va_arg(list, int*);
+                            int intNum = atoi(*intPointer);
                             break;
                         }
                         case 'c': {
-                            char c = getc(list);
-                            printf("%c", c);
+                            char* charPointer = va_arg(list, char*);
+                            char character = *charPointer;
                             break;
                         }
+                        case 's': {
+                            char* string;
+
+                            char check = *list;
+                            int index = 0;
+                            while (check != ' ') {
+                                    string[index] = check;
+                                    index++;
+                                    list++;
+                                    list++; check = *list;
+                            }
+                            for (int i = 0 ; i < index ; ++i)
+                                    printf("%c", string[index]);
+                            break;
+                                  }
+                        case 'f': {
+                                          char* string;
+
+                                          char check = *list;
+                                          int index = 0;
+                                          while (check != ' ') {
+                                                  string[index] = check; index++;
+                                                  list++; check == *list;
+                                          }
+                                          string[index + 1] = '\0';
+                                          double floatNum = atof(*string);
+                                          printf("%f", floatNum);
+                                          break;
+                                  }
                         default: break;
                         }
                 }
